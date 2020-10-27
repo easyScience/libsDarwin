@@ -3,7 +3,7 @@ requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry]
-name = "so_macos"
+name = "somacos"
 version = "0.0.1"
 authors = []
 description = ""
