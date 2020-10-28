@@ -3,10 +3,11 @@ requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry]
-name = "somacos"
+name = "libsDarwin"
 version = "0.0.1"
 authors = []
 description = ""
+packages = [ { include = "libsDarwin" } ]
 
 [tool.poetry.dependencies]
 python = "^3.7, <3.8"
