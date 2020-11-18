@@ -22,9 +22,6 @@ class ReflectionList(CFML_api.FortranBindedClass):
             CFML_api.crysfml_api.reflections_utilities_hkl_uni_reflist(
                 cell.get_fortran_address(), spg.get_fortran_address(),
                 lfriedel, value1, value2)["address"])
-        
-    def __del__(self):
-        CFML_api.crysfml_api.reflections_utilities_del_reflection_list(self.get_fortran_address())
     
     def compute_structure_factors(self, space_group, atom_list):
         CFML_api.crysfml_api.structure_factors_structure_factors(
