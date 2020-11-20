@@ -17,17 +17,289 @@ import CFML_api.FortranBindedClass
 
 class DiffractionPattern(CFML_api.FortranBindedClass):
     def __init__(self, simulation_conditions, reflection_list, scale_f):
+        CFML_api.FortranBindedClass.__init__(self)
         self._set_fortran_address(CFML_api.crysfml_api.diffraction_patterns_compute_powder_pattern(
             simulation_conditions.to_dict(), reflection_list.get_fortran_address(), scale_f)["address"])
         
-    def get_x(self):
+    def __del__(self):
+        address = self.get_fortran_address()
+        if address:
+            CFML_api.crysfml_api.diffraction_patterns_del_powder_pattern(self.get_fortran_address())
+    
+    @property
+    def title(self):
+        """
+        Identification of the pattern
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_title(self.get_fortran_address())["title"]
+    
+    @property
+    def diff_kind(self):
+        """
+        type of radiation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_diff_kind(self.get_fortran_address())["diff_kind"]
+    
+    @property
+    def scat_var(self):
+        """
+        x-space: 2theta, TOF, Q, s, d-spacing, SinT/L, etc
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_scat_var(self.get_fortran_address())["scat_var"]
+    
+    @property
+    def xax_text(self):
+        """
+        x-axis legend, eg. Lambda (Angstroms)
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_xax_text(self.get_fortran_address())["xax_text"]
+    
+    @property
+    def yax_text(self):
+        """
+        y-axis legend, eg. Intensity (arb. units)
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_yax_text(self.get_fortran_address())["yax_text"]
+    
+    @property
+    def instr(self):
+        """
+        file type
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_instr(self.get_fortran_address())["instr"]
+    
+    @property
+    def filename(self):
+        """
+        file name
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_filename(self.get_fortran_address())["filename"]
+    
+    @property
+    def filepath(self):
+        """
+        file path
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_filepath(self.get_fortran_address())["filepath"]
+    
+    @property
+    def xmin(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_xmin(self.get_fortran_address())["xmin"]
+    
+    @property
+    def xmax(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_xmax(self.get_fortran_address())["xmax"]
+    
+    @property
+    def ymin(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_ymin(self.get_fortran_address())["ymin"]
+    
+    @property
+    def ymax(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_ymax(self.get_fortran_address())["ymax"]
+    
+    @property
+    def scal(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_scal(self.get_fortran_address())["scal"]
+    
+    @property
+    def monitor(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_monitor(self.get_fortran_address())["monitor"]
+    
+    @property
+    def norm_mon(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_norm_mon(self.get_fortran_address())["norm_mon"]
+    
+    @property
+    def col_time(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_col_time(self.get_fortran_address())["col_time"]
+    
+    @property
+    def step(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_step(self.get_fortran_address())["step"]
+    
+    @property
+    def zerop(self):
+        """
+        
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_zerop(self.get_fortran_address())["zerop"]
+    
+    @property
+    def Tsamp(self):
+        """
+        Sample Temperature
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_Tsamp(self.get_fortran_address())["Tsamp"]
+    
+    @property
+    def Tset(self):
+        """
+        Setting Temperature (wished temperature)
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_Tset(self.get_fortran_address())["Tset"]
+    
+    @property
+    def npts(self):
+        """
+        Number of points
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_npts(self.get_fortran_address())["npts"]
+    
+    def is_ct_step(self):
+        """
+        Constant step
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_ct_step(self.get_fortran_address())["ct_step"]
+    
+    def is_gy(self):
+        """
+        logicals for graphics
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_gy(self.get_fortran_address())["gy"]
+    
+    def is_gycalc(self):
+        """
+        logicals for graphics
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_gycalc(self.get_fortran_address())["gycalc"]
+    
+    def is_gbgr(self):
+        """
+        logicals for graphics
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_gbgr(self.get_fortran_address())["gbgr"]
+    
+    def is_gsigma(self):
+        """
+        logicals for graphics
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_gsigma(self.get_fortran_address())["gsigma"]
+    
+    def is_sig_var(self):
+        """
+        If .true. the content of sigma is in fact the variance
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_sig_var(self.get_fortran_address())["sig_var"]
+    
+    def is_al_x(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_x(self.get_fortran_address())["al_x"]
+    
+    def is_al_y(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_y(self.get_fortran_address())["al_y"]
+    
+    def is_al_ycalc(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_ycalc(self.get_fortran_address())["al_ycalc"]
+    
+    def is_al_bgr(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_bgr(self.get_fortran_address())["al_bgr"]
+    
+    def is_al_sigma(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_sigma(self.get_fortran_address())["al_sigma"]
+    
+    def is_al_istat(self):
+        """
+        logicals for allocation
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_al_istat(self.get_fortran_address())["al_istat"]
+    
+    @property
+    def conv(self):
+        """
+        Wavelengths or Dtt1, Dtt2 for converting to Q,d, etc
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_conv(self.get_fortran_address())["conv"]
+    
+    @property
+    def x(self):
+        """
+        Scattering variable (2theta...)
+        """
         return CFML_api.crysfml_api.diffraction_patterns_get_x(self.get_fortran_address())["x"]
-        
-    def get_y(self):
+    
+    @property
+    def y(self):
+        """
+         Experimental intensity
+        """
         return CFML_api.crysfml_api.diffraction_patterns_get_y(self.get_fortran_address())["y"]
-        
-    x = property(get_x)
-    y = property(get_y)
+    
+    @property
+    def sigma(self):
+        """
+        observations sigma or variance (depending on sig_var)
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_sigma(self.get_fortran_address())["sigma"]
+    
+    @property
+    def istat(self):
+        """
+        Information about the point 'i'
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_istat(self.get_fortran_address())["istat"]
+    
+    @property
+    def ycalc(self):
+        """
+        Calculated intensity
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_ycalc(self.get_fortran_address())["ycalc"]
+    
+    @property
+    def bgr(self):
+        """
+        Background
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_bgr(self.get_fortran_address())["bgr"]
+    
+    @property
+    def nd(self):
+        """
+        Number of detectors contributing to the point 'i'
+        """
+        return CFML_api.crysfml_api.diffraction_patterns_get_nd(self.get_fortran_address())["nd"]
 
 
 class PseudoVoigt():

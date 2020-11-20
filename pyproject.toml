@@ -6,7 +6,8 @@ build-backend = "poetry.masonry.api"
 name = "libsDarwin"
 version = "0.0.1"
 authors = []
-description = "https://code.ill.fr/scientific-software/crysfml/-/jobs/40800/artifacts/download"
+readme = 'README.md'
+description = "Calculation engine libraries: CFML, GSAS-II"
 packages = [ { include = "libsDarwin" } ]
 
 [tool.poetry.dependencies]
