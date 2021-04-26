@@ -69,7 +69,7 @@ class PowderPatternSimulationConditions():
                     elif line_splitted[0].upper() == "BACKGD":
                         self.bkg = float(line_splitted[1])
                     elif line_splitted[0].upper() == "JOBTYPE":
-                        if line_splitted[0].upper() == "N":
+                        if line_splitted[1].upper() == "N":
                             self.job = PowderPatternSimulationSource.Neutrons
                         else:
                             self.job = PowderPatternSimulationSource.XRays
