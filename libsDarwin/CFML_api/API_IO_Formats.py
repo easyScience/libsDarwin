@@ -50,6 +50,16 @@ class JobInfo(CFML_api.FortranBindedClass):
 
     """
     def __init__(self, string_array=None):
+        """
+        Initialise a JobInfo. Can take as input an array of strings 
+
+        dat= ['Title SrTiO3',
+        'Npatt 1',
+        'Patt_1 NEUT_2THE  1.54056    1.54056    1.00      0.0        135.0',
+        'UVWXY        0.025  -0.00020   0.01200   0.00150  0.00465',
+        'STEP         0.05 ',
+        'Backgd       50.000']
+        """
         CFML_api.FortranBindedClass.__init__(self)
         if string_array is not None:
             dict = CFML_api.crysfml_api.IO_Formats_jobinfo_from_CIF_string_array(string_array)
@@ -66,13 +76,16 @@ class JobInfo(CFML_api.FortranBindedClass):
         
         print(self.title)
         print("Number of patterns: " + str(self.num_patterns) )
+        print("Type of pattern: " + self.pattern_type)
+
         print("Number of phases: " + str(self.num_phases) )
-        print("Type of pattern: " + self.pattern_types)
+        print("Name of phases: " + str(self.get_phase_names(0)) )
+        print("Name of phases: " + str(self.phase_name) )
         print("Lambda range: " +str(self.lambdas) )
         print("Lambda ratio: "+ str(self.lambda_ratio) )
         print("Range 2theta: "+ str(self.range_2theta) )
         print("Range sin(theta)/lambda: "+str(self.range_stl) )
-
+        
         
         
     @property
@@ -103,19 +116,20 @@ class JobInfo(CFML_api.FortranBindedClass):
         """
         return CFML_api.crysfml_api.IO_Formats_get_num_cmd(self.get_fortran_address())["num_cmd"]
     
-    @property
-    def pattern_types(self, indx=None):
+
+    def get_pattern_types(self, indx=None):
         """
-        String with the pattern type of pattern indx in [0, num_patterns-1]
+        String with the pattern type of indx in [0, num_patterns-1]
         """
         if indx:
             key=indx
         else:
             key=0
         return CFML_api.crysfml_api.IO_Formats_get_patt_typ(self.get_fortran_address(), key+1)["patt_typ"]
-    
-    @property
-    def phase_names(self, indx=None):
+
+    pattern_type = property(get_pattern_types)
+
+    def get_phase_names(self, indx=None):
         """
         String with the name of the phase indx in [0, num_phases-1]
         """
@@ -124,9 +138,11 @@ class JobInfo(CFML_api.FortranBindedClass):
         else:
             key=0
         return CFML_api.crysfml_api.IO_Formats_get_phas_nam(self.get_fortran_address(), key+1)["phas_nam"]
+
+    phase_name = property(get_phase_names)
     
-    @property
-    def cmd(self, indx=None):
+    
+    def get_cmd(self, indx=None):
         """
         Command lines: text for actions in [0, num_cmd-1]
         """
@@ -136,10 +152,10 @@ class JobInfo(CFML_api.FortranBindedClass):
             key=0
         return CFML_api.crysfml_api.IO_Formats_get_cmd(self.get_fortran_address(),key+1)["cmd"]
     
-    @property
-    def range_stl(self,indx=None):
+
+    def get_range_stl(self,indx=None):
         """
-        Range in sinTheta/Lambda of phase indx
+        Range in sinTheta/Lambda of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -149,11 +165,13 @@ class JobInfo(CFML_api.FortranBindedClass):
         maxb = CFML_api.crysfml_api.IO_Formats_get_range_stl(self.get_fortran_address(),key+1)["max"]
             
         return mina, maxb
+
+    range_stl = property(get_range_stl)
     
-    @property
-    def range_q(self,indx=None):
+
+    def get_range_q(self,indx=None):
         """
-        Range in 4pi*sinTheta/Lambda of phase indx
+        Range in 4pi*sinTheta/Lambda of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -163,12 +181,13 @@ class JobInfo(CFML_api.FortranBindedClass):
         maxb = CFML_api.crysfml_api.IO_Formats_get_range_q(self.get_fortran_address(),key+1)["max"]
             
         return mina, maxb
-        
+
+    range_q = property(get_range_q)
     
-    @property
-    def range_d(self, indx=None):
+
+    def get_range_d(self, indx=None):
         """
-        Range in d-spacing of phase indx
+        Range in d-spacing of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -178,12 +197,13 @@ class JobInfo(CFML_api.FortranBindedClass):
         maxb = CFML_api.crysfml_api.IO_Formats_get_range_d(self.get_fortran_address(),key+1)["max"]
             
         return mina, maxb
-        
+
+    range_d = property(get_range_d)
     
-    @property
-    def range_2theta(self, indx=None):
+    
+    def get_range_2theta(self, indx=None):
         """
-        Range in 2theta-spacing of phase indx
+        Range in 2theta-spacing of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -194,8 +214,8 @@ class JobInfo(CFML_api.FortranBindedClass):
             
         return mina, maxb
         
-    @range_2theta.setter
-    def range_2theta(self, range_theta, indx=None):
+    
+    def set_range_2theta(self, range_theta, indx=None):
         if indx:
             key=indx
         else:
@@ -203,11 +223,13 @@ class JobInfo(CFML_api.FortranBindedClass):
 
         (mina, maxb) = range_theta
         CFML_api.crysfml_api.IO_Formats_set_range_2theta(self.get_fortran_address(), mina, maxb, key+1)
+
+    range_2theta = property(get_range_2theta, set_range_2theta)
     
-    @property
-    def range_energy(self, indx=None):
+    
+    def get_range_energy(self, indx=None):
         """
-        Range in Energy of phase indx
+        Range in Energy of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -218,11 +240,12 @@ class JobInfo(CFML_api.FortranBindedClass):
             
         return mina, maxb
         
+    range_energy = property(get_range_energy)
     
-    @property
-    def lambdas(self, indx=None):
+    
+    def get_lambdas(self, indx=None):
         """
-        Lambda1, Lambda2 of phase indx
+        Lambda1, Lambda2 of phase indx [0, num_phases-1]
         """
         if indx:
             key=indx
@@ -233,8 +256,7 @@ class JobInfo(CFML_api.FortranBindedClass):
             
         return lambda1, lambda2
 
-    @lambdas.setter
-    def lambdas(self, range_lambda, indx=None):
+    def set_lambdas(self, range_lambda, indx=None):
         if indx:
             key=indx
         else:
@@ -243,17 +265,20 @@ class JobInfo(CFML_api.FortranBindedClass):
         (mina, maxb) = range_lambda
         CFML_api.crysfml_api.IO_Formats_set_lambda(self.get_fortran_address(), mina, maxb, key+1)
     
- 
-    @property
-    def lambda_ratio(self, indx=None):
+    lambdas = property(get_lambdas, set_lambdas)
+        
+
+    def get_lambda_ratio(self, indx=None):
         """
-        ratio lambda2/lambda1 
+        ratio lambda2/lambda1  [0, num_phases-1]
         """
         if indx:
             key=indx
         else:
             key=0
         return CFML_api.crysfml_api.IO_Formats_get_ratio(self.get_fortran_address(),key+1)["ratio"]
+
+    lambda_ratio = property(get_lambda_ratio)
     
     @property
     def d_to_tof_1(self):
@@ -412,13 +437,6 @@ class CIFFile():
         """
         return self.__job_info
 
-    @property
-    def powder_pattern_simulation_conditions(self):
-        """
-        Info on the type of job (CFML_api.Job_info type)
-        """
-        return self.__powpat_simcond
-    
     @filename.setter
     def filename(self, filename):
         """
@@ -474,6 +492,3 @@ class CIFFile():
 
             self.__job_info = JobInfo.from_fortran_address(dict["JobInfo"])
 
-            powpat_simcond = CFML_api.PowderPatternSimulationConditions()
-            powpat_simcond.readFromCFLFile(filename)
-            self.__powpat_simcond = powpat_simcond
